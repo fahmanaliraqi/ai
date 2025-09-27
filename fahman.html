@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فهمان AI</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',Tahoma,sans-serif;}
+body{background:#fff;color:#000;transition:background 0.3s,color 0.3s;}
+body.dark-mode{background:#121212;color:#eee;}
+
+.sidebar{position:fixed;top:0;left:-220px;width:220px;height:100vh;background:#f9f9f9;border-right:1px solid #ccc;padding:15px;display:flex;flex-direction:column;justify-content:space-between;transition:left 0.3s;z-index:999;}
+.sidebar.active{left:0;}
+.sidebar h3{font-size:20px;margin-bottom:15px;}
+.sidebar ul{list-style:none;flex:1;}
+.sidebar ul li{margin-bottom:10px;font-size:16px;cursor:pointer;color:#333;transition:color 0.3s;display:flex;align-items:center;gap:8px;}
+.sidebar ul li:hover{color:#000;}
+.sidebar ul li a.telegram-link{text-decoration:none;color:#000;font-weight:bold;display:flex;align-items:center;gap:5px;}
+.bottom-buttons{margin-top:auto;display:flex;flex-direction:column;gap:10px;}
+.bottom-buttons button{padding:10px;border:none;border-radius:8px;font-weight:bold;cursor:pointer;transition:background 0.3s;font-size:15px;color:#fff;}
+.bottom-buttons button.upgrade{background:#28a745;}
+.bottom-buttons button.logout{background:#e60000;}
+.bottom-buttons button:hover{opacity:0.9;}
+
+.main-layout{margin-left:0;transition:margin-left 0.3s;height:100vh;display:flex;flex-direction:column;}
+.main-layout.shifted{margin-left:220px;}
+
+.chat-header{background:transparent;text-align:center;padding:15px;font-size:24px;border-bottom:1px solid #ccc;position:relative;}
+.settings-btn{position:absolute;left:10px;top:10px;background:none;border:1px solid #ccc;border-radius:20px;padding:5px 10px;cursor:pointer;font-size:18px;}
+
+.chat-messages{padding:20px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;flex-grow:1;position:relative;}
+.message{font-size:17px;line-height:1.6;max-width:100%;}
+.user-message{text-align:left;direction:ltr;color:#000;font-weight:bold;}
+.bot-message{text-align:right;direction:rtl;color:#333;}
+.typing-message{color:#999;font-style:italic;}
+
+.chat-input{display:flex;border-top:1px solid #ccc;padding:10px;flex-shrink:0;background:#fff;}
+.chat-input input{flex:1;padding:10px 15px;border:1px solid #ccc;border-radius:25px;font-size:16px;outline:none;}
+.chat-input button{background:transparent;border:none;font-size:22px;padding:0 15px;cursor:pointer;transition:transform 0.5s ease;}
+
+.logo-center{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:220px;opacity:0.9;pointer-events:none;z-index:9999;}
+
+.popup-menu{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.4);backdrop-filter:blur(5px);display:none;justify-content:center;align-items:center;z-index:10000;}
+.popup-content{background:#111;color:#fff;padding:20px 25px;border-radius:12px;width:260px;display:flex;flex-direction:column;gap:12px;position:relative;}
+.popup-content button{padding:8px;border:none;border-radius:8px;background:#222;color:#fff;cursor:pointer;transition:background 0.3s;font-weight:bold;}
+.popup-content button:hover{background:#333;}
+.popup-content .close-popup{position:absolute;top:10px;left:10px;background:#e60000;padding:5px 10px;border-radius:8px;font-weight:bold;}
+.popup-content .close-popup:hover{background:#b30000;}
+</style>
+</head>
+<body>
+
+<div class="sidebar" id="sidebar">
+  <div>
+    <h3>القائمة</h3>
+    <ul>
+      <li>
+        <a href="https://t.me/Fahman_chat_ai" target="_blank" class="telegram-link">
+          🕊 Telegram قناتنا
+        </a>
+      </li>
+      <li onclick="showPopup('حول التطبيق')">حول التطبيق</li>
+      <li onclick="showPopup('إدارة الحساب')">إدارة الحساب</li>
+      <li onclick="showPopup('اللغة')">اللغة</li>
+      <li onclick="showPopup('أخبار فهمان')">أخبار فهمان</li>
+      <li onclick="showPopup('الدعم')">الدعم</li>
+    </ul>
+  </div>
+  <div class="bottom-buttons">
+    <button class="upgrade" onclick="window.location.href='vip.html'">الترقية</button>
+    <button class="logout" onclick="window.location.href='index.html'">تسجيل الخروج</button>
+  </div>
+</div>
+
+<div class="main-layout" id="mainLayout">
+  <div class="chat-header">
+    <button class="settings-btn" onclick="toggleSidebar()">☰</button>
+    فهمان العراقي
+  </div>
+
+  <div id="messages" class="chat-messages">
+    <div class="message bot-message">أهلًا حبي، أني مطور من قبل محمد علي حنتاو. أسألني أي شي يعجبك!</div>
+    <img src="logo.png" alt="فهمان Ai Logo" class="logo-center">
+  </div>
+
+  <form id="input-area" class="chat-input">
+    <input type="text" id="user-input" placeholder="اكتب سؤالك..." autocomplete="off" required>
+    <button type="submit">&#10148;</button>
+  </form>
+</div>
+
+<div class="popup-menu" id="popupMenu">
+  <div class="popup-content" id="popupContent">
+    <button class="close-popup" onclick="closePopup()">إلغاء</button>
+    <div id="popupText" style="margin-top:25px;font-size:16px;">نص القائمة</div>
+  </div>
+</div>
+
+<script>
+const sidebar = document.getElementById('sidebar');
+const mainLayout = document.getElementById('mainLayout');
+const userInput = document.getElementById('user-input');
+const inputArea = document.getElementById('input-area');
+const chatMessages = document.getElementById('messages');
+const popupMenu = document.getElementById('popupMenu');
+const popupText = document.getElementById('popupText');
+
+function toggleSidebar() { sidebar.classList.toggle('active'); mainLayout.classList.toggle('shifted'); }
+function showPopup(text) { popupText.textContent = text + ': هذه النافذة المنبثقة تعمل بنفس التصميم!'; popupMenu.style.display = 'flex'; }
+function closePopup() { popupMenu.style.display = 'none'; }
+
+// إرسال الرسائل للسيرفر بدل API مباشرة
+inputArea.addEventListener('submit', async e => {
+  e.preventDefault();
+  const text = userInput.value.trim();
+  if (!text) return;
+
+  const userMsg = document.createElement('div');
+  userMsg.className = 'message user-message';
+  userMsg.textContent = text;
+  chatMessages.appendChild(userMsg);
+
+  const typingMsg = document.createElement('div');
+  typingMsg.className = 'message bot-message typing-message';
+  typingMsg.textContent = 'جاري الكتابة...';
+  chatMessages.appendChild(typingMsg);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  try {
+    const res = await fetch('/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: text })
+    });
+
+    const data = await res.json();
+    chatMessages.removeChild(typingMsg);
+
+    const botMsg = document.createElement('div');
+    botMsg.className = 'message bot-message';
+    botMsg.textContent = data.reply || 'لا يوجد رد';
+    chatMessages.appendChild(botMsg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  } catch (err) {
+    chatMessages.removeChild(typingMsg);
+    const botMsg = document.createElement('div');
+    botMsg.className = 'message bot-message';
+    botMsg.textContent = 'خطأ في الاتصال بالـ API';
+    chatMessages.appendChild(botMsg);
+  }
+
+  userInput.value = '';
+});
+
+// السهم يتحرك تدريجي عند الكتابة
+const sendBtn = inputArea.querySelector('button');
+userInput.addEventListener('input', () => { sendBtn.style.transform = 'rotate(20deg)'; });
+userInput.addEventListener('blur', () => { sendBtn.style.transform = 'rotate(0deg)'; });
+
+</script>
+</body>
+</html>

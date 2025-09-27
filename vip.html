@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>فهمان - ترقية فاخرة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+    }
+    body {
+      background: linear-gradient(145deg, #fdfdfd, #f0f0f0);
+      padding: 60px 20px;
+      color: #000;
+      animation: fadeIn 1.2s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1 {
+      text-align: center;
+      font-size: 36px;
+      margin-bottom: 60px;
+      color: #222;
+      position: relative;
+    }
+    .back-btn {
+      position: absolute;
+      left: 20px;
+      top: 0;
+      padding: 10px 18px;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+    .back-btn:hover { background: #444; }
+
+    .plans {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+    .card {
+      width: 320px;
+      background: #fff;
+      border-radius: 20px;
+      border: 2px solid #e0e0e0;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      transition: all 0.4s ease;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      height: 520px;
+    }
+    .card:hover {
+      transform: translateY(-15px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    }
+    .card.gold { border: 3px solid gold; z-index: 10; }
+    .card .header {
+      height: 180px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .card.gold .header { background: linear-gradient(135deg, #d4af37, #ffd700); }
+    .card.silver .header { background: linear-gradient(135deg, #b0b0b0, #dcdcdc); }
+    .card.bronze .header { background: linear-gradient(135deg, #cd7f32, #e3b778); }
+    .card.free .header { background: linear-gradient(135deg, #b3e5fc, #4fc3f7); }
+    .card .header img {
+      width: 80px;
+      height: 80px;
+      transition: transform 0.5s ease;
+    }
+    .card:hover .header img { transform: rotate(20deg) scale(1.1); }
+    .card .body {
+      padding: 25px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card h2 { font-size: 24px; margin-bottom: 10px; color: #222; text-align: center; }
+    .card .price { font-size: 18px; text-align: center; margin-bottom: 20px; color: #444; }
+    .features { list-style: none; margin-bottom: 20px; }
+    .features li {
+      background: #f5f5f5;
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      position: relative;
+      padding-right: 30px;
+      transition: background 0.3s;
+    }
+    .features li:hover { background: #eaeaea; }
+    .features li::before {
+      content: "✓";
+      position: absolute;
+      right: 10px;
+      color: #2e7d32;
+      font-weight: bold;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s;
+    }
+    .btn:hover { background: #222; transform: scale(1.05); }
+    .badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: crimson;
+      color: #fff;
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 5px;
+      animation: pop 0.6s ease-in-out;
+    }
+    .card.gold .badge { background: gold; color: #000; }
+    @keyframes pop {
+      0% { transform: scale(0); opacity: 0; }
+      60% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    .note {
+      text-align: center;
+      margin-top: 60px;
+      font-size: 18px;
+      color: #333;
+      padding: 10px;
+      background: #fff;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    @media (max-width: 900px) {
+      .plans { flex-direction: column; align-items: center; }
+      .card.gold { transform: scale(1.02); }
+    }
+  </style>
+</head>
+<body>
+  <h1>
+    خطط ترقية فهمان
+    <button class="back-btn" onclick="window.location.href='Fahman.html'">رجوع للمحادثة</button>
+  </h1>
+  <div class="plans">
+
+    <!-- Free -->
+    <div class="card free">
+      <div class="badge">مجانية</div>
+      <div class="header"><img src="free.png" alt="Free Plan" /></div>
+      <div class="body">
+        <h2>الخطة المجانية</h2>
+        <div class="price">0$ / شهر</div>
+        <ul class="features">
+          <li>25 سؤال يوميًا</li>
+          <li>سرعة استجابة عادية</li>
+        </ul>
+        <button class="btn" style="background: #999; cursor: default;">مُفعل</button>
+      </div>
+    </div>
+
+    <!-- Bronze -->
+    <div class="card bronze">
+      <div class="badge">الأقل سعرًا</div>
+      <div class="header"><img src="bronze.png" alt="Bronze Plan" /></div>
+      <div class="body">
+        <h2>الخطة البرونزية</h2>
+        <div class="price">3$ / شهر</div>
+        <ul class="features">
+          <li>199 سؤال يوميًا</li>
+          <li>ردود أسرع</li>
+        </ul>
+        <button class="btn" onclick="window.open('https://t.me/p1_2p','_blank')">اشترك الآن</button>
+      </div>
+    </div>
+
+    <!-- Silver -->
+    <div class="card silver">
+      <div class="badge">الخطة المتوازنة</div>
+      <div class="header"><img src="silver.png" alt="Silver Plan" /></div>
+      <div class="body">
+        <h2>الخطة الفضية</h2>
+        <div class="price">6$ / شهر</div>
+        <ul class="features">
+          <li>399 سؤال يوميًا</li>
+          <li>دعم فني سريع</li>
+          <li>تحليل ملفات نصية</li>
+        </ul>
+        <button class="btn" onclick="window.open('https://t.me/p1_2p','_blank')">اشترك الآن</button>
+      </div>
+    </div>
+
+    <!-- Gold -->
+    <div class="card gold">
+      <div class="badge">الأكثر شهرة ⭐</div>
+      <div class="header"><img src="gold.png" alt="Gold Plan" /></div>
+      <div class="body">
+        <h2>الخطة الذهبية</h2>
+        <div class="price">25$ / شهر</div>
+        <ul class="features">
+          <li>أسئلة غير محدودة</li>
+          <li>تحليل صور وملفات</li>
+          <li>دعم فني خاص</li>
+        </ul>
+        <button class="btn" onclick="window.open('https://t.me/p1_2p','_blank')">ترقية مميزة</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- الجملة التوضيحية -->
+  <div class="note">
+    اضغط على الاشتراك للفئة المطلوبة لتحويلك إلى التليجرام واستلام اسم المستخدم.
+  </div>
+
+</body>
+</html>
